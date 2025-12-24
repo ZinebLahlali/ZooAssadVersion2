@@ -1,4 +1,5 @@
 <?php
+require_once 'Database.php';
 
 class Utilisateur{
     protected $id_user;
@@ -8,7 +9,7 @@ class Utilisateur{
     protected $password;
  
 
-public function __construct(string $nom  , string $email  , string $role , string $password){
+public function __construct($nom = ""  ,$email =""  , $role = "" , $password = ""){
  $this->nom = $nom;
  $this->email = $email;
  $this->role = $role;
@@ -91,28 +92,43 @@ $pdo = $db->getPdo();
     }
     
 }
+
+
+
 public function trouverParEmail($email){
- $db = new Database();
+     $db = new Database();
 $pdo = $db->getPdo();
 
 $sql= "SELECT * FROM utilisateurs WHERE email = :email";
 
  $stmt = $pdo->prepare($sql);
- $stmt->bindParam(':email',$this->email);
-  $result = $stmt->execute();
-  while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
-    $user = new
-  }
+ $stmt->bindParam(':email',$email);
+  $stmt->execute();
+
+  return $stmt->fetch(PDO::FETCH_ASSOC); 
+  
+    
+  } 
+  
+  
 
 
-}
  
 
 public function verifierMotDePasse($passwordInput,$password){
     return password_verify($passwordInput,$password);
 }
 
+
+
 }
+
+$userModel = new Utilisateur();
+  $useData = $userModel->trouverParEmail("aliadnan@gmail.com");
+  if($useData){
+echo $useData['nom'] . " " . $useData['email'] . " " . $useData['role'];  
+  } 
+
 
 
 
