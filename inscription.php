@@ -1,4 +1,42 @@
+<?php
+//instanciation
+$u = new utilisateur("","","","","activé", "non approuvé"); //$u est une instance de la classe Utilisateur
+    $db = new Database();
+   $pdo = $db->getPdo();
 
+if(isset($_POST['singup_submit'])){
+   $u->setNom($_POST['nom']);
+   $u->setEmail($_POST['email']);
+   $u->setPassword($_POST['password']);
+   $passwordconfi=$_POST['passwordconfi'];
+   $u->setRole($_POST['role']);
+//    $approved = ($u->setRole($_POST['role']) == 'Guide') ? false:true; // test condition ? cas vrai:cas faux;
+//    $u->setApprouve($approved);
+
+    function valideEmail($email){
+   $mailRegex = '/^[a-zA-Z_]{4,15}@[a-zA-Z]{4,10}\.[a-zA-Z]{2,3}$/';
+           return preg_match($mailRegex,$email);
+    }
+    function validPassword($password){
+        $passRegex = '/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[-_@&!#\.*]){8,}$/';
+        return preg_match($passRegex, $password);
+    }
+
+   if(!empty($u->getNom())&&!empty($u->getEmail())&&!empty($u->getPassword())&&!empty($u->getRole())){
+        if(valideEmail($email))
+            echo "email valide";
+         else
+             echo "email invalide";
+        
+        if(validPassword($password))
+            echo " Mot de passe valide";
+        else
+           echo "Mot de passe invalide";
+                
+ 
+}   else
+            echo "veuillez remplire tous les champs.";
+}
 ?>
 
 
