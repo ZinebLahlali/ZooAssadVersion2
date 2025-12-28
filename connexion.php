@@ -1,18 +1,43 @@
 <?php
-require_once 'database.php';
+session_start();
+require_once 'classes/database.php';
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['passwordInput'];
 
+    //POST should to be in condition
+    $user = Utilisateur::trouverParEmail($email);
 
-$user = Utilisateur::trouverParEmail($email);
-if($user && $user->verifierMotDePasse($password));
-   echo "la connexion est ok";
-   
-   header('Location: index.php');
-   exit;
-}
+    if ($user && $user->verifierMotDePasse($password)) {
+        $_SESSION['user_id'] = $user->getId();
+        $role = $user->getRole();
+        $_SESSION['user_role'] = $role;
+
+        switch ($role) {
+            case 'admin':
+                header('location: dashboard_admin.php');
+                exit;
+            case 'guide':
+                header('location: dashboard_guide.php');
+                exit;
+            case 'visiteur':
+                header('location: dashboard_visiteur.php');
+                exit;
+            default:
+                header('location: index.php');
+                exit;
+        } //switch end 
+        
+    } else { 
+        echo "mot de passe ou email incorrect";
+        exit;
+    }
+} // POST end
+
+
+  // if($user->getEtat() !== "active")
+
 
 ?>
 

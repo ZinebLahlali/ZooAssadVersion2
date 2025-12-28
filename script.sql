@@ -59,3 +59,13 @@ CREATE TABLE reservations (
     FOREIGN KEY (idVisite) REFERENCES visitesguidees(id_visite),
     FOREIGN KEY (idUtilisateur) REFERENCES utilisateurs (id_user)
 );
+
+
+
+INSERT INTO animaux (nom, espece, alimentation, image, paysOrigine, descriptionCourte, id_habitat)
+VALUES('Simba', 'Panthera leo', 'Carnivore', 'https://images.unsplash.com/photo-1543946207-39bd91e70ca7', 'Kenya', 'Le roi de la jungle. Simba aime se reposer au soleil et rugir à la tombée de la nuit.',1);
+
+
+
+INSERT INTO habitats( nom, typeClimat, description, zoneZoo) VALUES
+('Volière', 'Climat tropical tempéré', ' La volière est un espace ouvert permettant aux oiseaux de voler librement dans un environnement sécurisé','Zone E');

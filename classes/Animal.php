@@ -3,7 +3,8 @@ require_once 'database.php';
 
 
 class animal
-{ public $id_animal;
+{ 
+    public $id_animal;
     public $nom;
     public $espece;
     public $alimentation;
@@ -23,6 +24,7 @@ public function __construct($nom = "", $espece = "", $alimentation = "", $image 
     $this->paysOrigine = $paysOrigine;
     $this->descriptionCourte = $descriptionCourte;
     $this->id_habitat = $id_habitat;
+}
 
 
    public function getId()
@@ -45,7 +47,7 @@ public function __construct($nom = "", $espece = "", $alimentation = "", $image 
   }
   public function getImage()
   {
-    return $this->Image;
+    return $this->image;
   }
   public function getPaysOrigine()
   {
@@ -115,7 +117,8 @@ public function __construct($nom = "", $espece = "", $alimentation = "", $image 
 
   }
 
-  public function listerParHabitat()
+
+  public  static function listerParHabitat()
   {
     $db = new Database();
     $pdo = $db->getPdo();
@@ -129,27 +132,75 @@ public function __construct($nom = "", $espece = "", $alimentation = "", $image 
 
   }
 
+  public function creer(){
+  $db = new Database();
+  $pdo = $db->getPdo();
+
+      $sql= "INSERT INTO animaux(nom, espece, alimentation, image, paysOrigine, descriptionCourte, id_habitat) VALUES (?, ?, ?, ?, ?, ?, ?)";
+      $stmt = $pdo->prepare($sql);
+
+          $stmt->execute([
+          $this->getNom(),
+          $this->getEspece(),
+          $this->getAlimentation(),
+          $this->getImage(),
+          $this->getPaysOrigine(),
+          $this->getDescriptionCourte(),
+          $this->getIdHabitat() 
+          ]);
+      }
+
+     public function supprimer()
+        {   $db = new Database();
+            $pdo = $db->getPdo();
+
+            $sql = "DELETE FROM animaux WHERE id_animal = :id";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute(['id' => $this->getId()]);
+        }
 
 
 
+        public function mettreAJour()
+        { $db = new Database();
+          $pdo = $db->getPdo();
+          
+          $sql = "UPDATE animaux 
+          SET nom = :nom, espece = :espece,  alimentation = :alimentation,  image = :image, paysOrigine =:paysOrigine, descriptionCourte = :descriptionCourte,  id_habitat = :id_habitat WHERE id_animal = :id_animal";
+          $stmt = $pdo->prepare($sql);
+           return $stmt->execute([
+                ':id_animal'         => $this->getId(),
+                ':nom'               => $this->getNom(), 
+                ':espece'            => $this->getEspece(),
+                ':alimentation'      => $this->getAlimentation(),
+                ':image'             => $this->getImage(),
+                ':paysOrigine'       => $this->getPaysOrigine(),
+                ':descriptionCourte' => $this->getDescriptionCourte(),
+                ':id_habitat'        => $this->getIdHabitat() 
+                  ]);
+        }
 
+
+ public function editanimal($id_animal)
+ { $db = new Database();
+   $pdo = $db->getPdo();
+  $sql = "SELECT * FROM animaux WHERE id_animal = ?";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([(int)$id_animal]);
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+     if ($result) {
+        $this->setId($result['id_animal']);
+        $this->setNom($result['nom']);
+        $this->setEspece($result['espece']);
+        $this->setAlimentation($result['alimentation']);
+        $this->setImage($result['image']);
+        $this->setPaysOrigine($result['paysOrigine']);
+        $this->setDescriptionCourte($result['descriptionCourte']);
+        $this->setIdHabitat($result['id_habitat']);
+
+        return $this;
+    }
+ }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
-
-
-
 ?>

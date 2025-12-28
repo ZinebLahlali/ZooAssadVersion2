@@ -1,26 +1,36 @@
 <?php
+session_start();
+require_once  'classes/VisiteGuidee.php';
 
+$db = new Database();
+$pdo = $db->getPdo();
+
+if(isset($_SESSION['id_user'])){
+  $id_guide = $_SESSION['id_user'];
+  $visites = VisiteGuide::listerParGuide($id_guide);
+} else {
+   header("location: dashboard_guide.php");
+   exit;
+}
+
+
+$v = new VisiteGuide("","","","","","","");
+
+if(isset($_POST['visiteSubmit'])){
+  $v->setTitre($_POST['titre']);
+  $v->setDateheure($_POST['date']);
+  $v->setLangue($_POST['langue']);
+  $v->setCapacitemax($_POST['capacite']);
+  $v->setStatut($_POST['statut']);
+  $v->setduree($_POST['duree']);
+  $v->setPrix($_POST['prix']);
+
+  $v->creer();
+  header('location: dashboard_guide.php');
+  exit;
+}
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -201,7 +211,34 @@
                     </form>
 </div>
 
-
+    <div>
+      <table class="min-w-full bg-white border-collapse border border-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 text-left border-b text-gray-700">Nom</th>
+                                <th class="py-2 px-4 text-left border-b text-gray-700">Espèce</th>
+                                <th class="py-2 px-4 text-left border-b text-gray-700">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                         <?php foreach ($ as $animal): ?>
+                            <tr>
+                                <td class="py-2 px-4"><?php echo htmlspecialchars($animal["nom"]); ?></td>
+                                <td class="py-2 px-4"><?php echo htmlspecialchars($animal["espece"]); ?></td>  
+                                <td>
+                                   <a href="admin_animaux.php?id<?= $animal['id_animal']?>" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Modifier</a>
+                                   <a href="dashboard_admin.php?id_a=<?= $animal['id_animal'] ?>"
+                                          onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?')" 
+                                          class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                                          Supprimer
+                                        </a>
+                                </td> 
+                            </tr>
+                             <?php endforeach; ?>
+                             
+                        </tbody>
+                    </table>
+    </div>
   </main>
 </div>
 

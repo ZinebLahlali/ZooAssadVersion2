@@ -9,11 +9,13 @@ class Utilisateur{
     protected $password;
  
 
-  public function __construct($nom = ""  ,$email =""  , $role = "" , $password = ""){
+  public function __construct($nom ,$email  , $role , $password){
   $this->nom = $nom;
   $this->email = $email;
   $this->role = $role;
-  $this->password = password_hash($password,PASSWORD_DEFAULT);
+  $this->password = $password;
+ 
+  
 
   
 
@@ -41,6 +43,7 @@ class Utilisateur{
   {
     return $this->password;
   }
+  
 
   //Setters qui permettent de mettre à jour les attributs id, nom, email, role, password,etat et approuve
 
@@ -65,8 +68,11 @@ class Utilisateur{
 
   public function setPassword($password)
   {
-    $this->password = password_hash($password,PASSWORD_DEFAULT);
+    $this->password = $password;
   }
+  
+
+
 
 
   public function __tostring() : string
@@ -86,7 +92,8 @@ class Utilisateur{
             $this->nom , 
             $this->email,
             $this->role,
-            $this->password
+            $this->password,
+           
           ]);
 
           

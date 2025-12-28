@@ -3,24 +3,26 @@ require_once 'database.php';
 
 
 class habitat
-{ public $id_habitat;
+{   public  $id_habitat;
     public $nom;
     public $typeclimat;
     public $description;
-    public $zonezoo
+    public $zonezoo;
+    // public $image
    
  
 
 
 
 
-public function __construct($nom = "", $typeclimat = "", $description = "", $zonezoo = ""){
+  public function __construct($nom = "", $typeclimat = "", $description = "", $zonezoo = ""){
     $this->nom = $nom;
     $this->typeclimat = $typeclimat;
     $this->description = $description;
     $this->zonezoo = $zonezoo;
+    // $this->image = $image;
 
-
+  }
 
    public function getId()
   {
@@ -44,6 +46,11 @@ public function __construct($nom = "", $typeclimat = "", $description = "", $zon
   {
     return $this->zonezoo;
   }
+//   public function getImage()
+//   {
+//     return $this->image;
+//   }
+  
   
 
 
@@ -72,6 +79,10 @@ public function __construct($nom = "", $typeclimat = "", $description = "", $zon
   {
     $this->zonezoo = $zonezoo;
   }
+//    public function setImage($image)
+//   {
+//     $this->image = $image;
+//   }
 
   
   public static function listerTous() 
@@ -87,7 +98,25 @@ public function __construct($nom = "", $typeclimat = "", $description = "", $zon
   }
 
 
+ public function creer(){
+  $db = new Database();
+  $pdo = $db->getPdo();
 
+      $sql= "INSERT INTO habitats(nom, typeclimat, description, zonezoo) VALUES (?, ?, ?, ?)";
+      $stmt = $pdo->prepare($sql);
+
+          $stmt->execute([
+            $this->nom , 
+            $this->typeclimat,
+            $this-> description,
+            $this-> zonezoo,
+          
+           
+          ]);
+
+          
+
+      }
 
 
 
@@ -103,7 +132,9 @@ public function __construct($nom = "", $typeclimat = "", $description = "", $zon
 
 
 
-}
+
+
+
 
 
 
