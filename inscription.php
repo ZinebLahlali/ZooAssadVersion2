@@ -3,7 +3,7 @@ include_once "./classes/Utilisateur.php";
 
 $message = "";
 //instanciation
-$u = new Utilisateur("","","","","activé", "non approuvé"); //$u est une instance de la classe Utilisateur
+$u = new Utilisateur("","","","","", ""); //$u est une instance de la classe Utilisateur
     $db = new Database();
    $pdo = $db->getPdo();
   
@@ -44,8 +44,17 @@ $u = new Utilisateur("","","","","activé", "non approuvé"); //$u est une insta
           exit;
  
 }   else
-            echo "veuillez remplire tous les champs.";
+  
+
+echo "veuillez remplire tous les champs.";
+
+
+if($role == "Guide"){
+   $u->approuve = "Non approuve";
 }
+}
+
+
 ?>
 
 
